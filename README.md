@@ -25,7 +25,6 @@ npx skills add -g vuon9/skills --skill diagnosing-bugs
 | [invariant-check](skills/invariant-check) | Checking a rule tests can't cover (races, retries, double charges) with TLA+ |
 | [local-pr-review](skills/local-pr-review) | Answering notes in a live Hunk review session |
 | [sidequest](skills/sidequest) | Digging into one question in a forked session |
-| [statechart](skills/statechart) | Drawing a TLA+ model as a statechart and the path to each broken rule |
 | [use-ghostty](skills/use-ghostty) | Reading and driving other Ghostty panes, tabs, and windows |
 | [walk-me](skills/walk-me) | Working through questions or open decisions one item at a time |
 | [where-are-we](skills/where-are-we) | A recap of a session's goal, progress, and drift |
@@ -36,6 +35,13 @@ npx skills add -g vuon9/skills --skill diagnosing-bugs
 python3 -m unittest discover -s tests -v
 ```
 
+## Credits
+
+Two skills here are edited versions of other people's work, and each keeps its original MIT license in its folder:
+
+- [diagnosing-bugs](skills/diagnosing-bugs) is based on `diagnosing-bugs` from [mattpocock/skills](https://github.com/mattpocock/skills) by Matt Pocock.
+- [invariant-check](skills/invariant-check) merges `create-formal-verification-skill` and `maintain-formal-verification-skill` from [pstack](https://github.com/cursor/plugins/tree/main/pstack) by Lauren Tan.
+
 ## License
 
-MIT
+MIT, except where a skill folder has its own `LICENSE`.

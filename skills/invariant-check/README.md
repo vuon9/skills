@@ -43,7 +43,9 @@ Plain CRUD, UI layout, or a bug you can already reproduce with a test. Use
 
 ## Relationship
 
-TLA+ checks are read with `statechart`, which draws the flow and the path to
+TLA+ checks are read with
+[`statechart`](https://github.com/cursor/plugins/tree/main/harness/pstack/claude-code/skills/statechart)
+from pstack, which draws the flow and the path to
 each broken rule. Reach for it on a timing or ordering bug that no test
 reproduces.
 

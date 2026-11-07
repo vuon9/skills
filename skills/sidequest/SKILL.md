@@ -104,13 +104,30 @@ else
     printf 'the split returned no block id, read it and hand the draft to the user:\n%s\n' "$split"
     exit 1
   }
+  # Pi and Claude Code put their session name in the terminal title once the
+  # input box is up, so read the title off the block. Grepping the screen is not
+  # safe here: the forked conversation repeats the words the screen markers use.
+  title_ready=
   for _ in $(seq 1 60); do
-    "$R" capture -s "$REX_SESSION" -b "$new" --trim 2>/dev/null | grep -Eq "$ready" && break
+    title=$("$R" block call -s "$REX_SESSION" -b "$new" title 2>/dev/null | jq -r '.title // empty' 2>/dev/null)
+    if [ -n "${PI_SESSION_FILE:-}" ]; then
+      [ "${title#π - }" != "$title" ] && title_ready=1 && break
+    elif [ -n "$parent_name" ] && [ "${title#*"$parent_name"}" != "$title" ]; then
+      title_ready=1
+      break
+    fi
     sleep 1
   done
-  if ! "$R" capture -s "$REX_SESSION" -b "$new" --trim 2>/dev/null | grep -Eq "$ready"; then
+  if [ -z "$title_ready" ]; then
     printf 'the fork did not reach its input box, read it and hand the draft to the user:\n'
     "$R" capture -s "$REX_SESSION" -b "$new" --trim 2>&1 | tail -20
+    exit 1
+  fi
+  # The paste markers below only work when the app asked for bracketed paste.
+  # A pane that did not ask would show them as literal text.
+  paste=$("$R" block call -s "$REX_SESSION" -b "$new" modes 2>/dev/null | jq -r '.modes[]? | select(.name == "bracketed_paste") | .set' 2>/dev/null)
+  if [ "$paste" = false ]; then
+    printf 'the fork did not enable bracketed paste, so the draft cannot be pasted unsent; hand it to the user in the reply:\n'
     exit 1
   fi
   printf '\033[200~%s\033[201~' "$draft" | "$R" send -s "$REX_SESSION" -b "$new"

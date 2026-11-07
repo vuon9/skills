@@ -1,9 +1,9 @@
 # sidequest
 
 Dig into one question without derailing the main chat. `/sidequest` forks the
-current conversation into a Ghostty split beside your pane and leaves a
-drafted deep-dive prompt in its input box. You edit it and send it when you
-are ready, so nothing runs until you do.
+current conversation into a split beside your pane and leaves a drafted
+deep-dive prompt in its input box. You edit it and send it when you are ready,
+so nothing runs until you do.
 
 ## Use it with a prompt
 
@@ -31,10 +31,26 @@ pi runs `--cmd` through a login shell that never reads your rc files, so the
 skill passes `PATH` through and calls `pi` by absolute path. `--wait-after`
 keeps a shell in the pane once pi exits.
 
+## Terminal apps
+
+The skill reads `TERM_PROGRAM` and drives whichever app it finds. It does not
+guess: when neither Ghostty nor Rex is there, it hands you the draft instead.
+
+| App | How it drives the pane |
+| --- | --- |
+| Ghostty | the `use-ghostty` skill's script, `scripts/ghostty.js` |
+| Rex | the `rex` command, using `REX_SESSION` and `REX_BLOCK` from the environment |
+
+Both branches split to the right, wait for the fork's input box, and paste the
+draft as a bracketed paste so the app does not submit it. Ghostty's `send`
+already pastes. Rex's `send` writes raw bytes, so the skill wraps the draft in
+`\033[200~` and `\033[201~` itself.
+
 ## Requirements
 
 - Claude Code (for `--fork-session`) or pi (for `--fork`).
-- Ghostty 1.3+ on macOS, and the `use-ghostty` skill installed next to this one.
+- Ghostty 1.3+ on macOS with the `use-ghostty` skill installed next to this one,
+  or Rex with its `rex` command on `PATH`.
 - `jq`.
 
 ## Relationship to built-ins

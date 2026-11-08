@@ -66,11 +66,10 @@ python3 -m unittest discover -s tests -v
 Skills based on other people's work keep their copyright lines in the root `LICENSE`:
 
 - [diagnosing-bugs](skills/diagnosing-bugs) is based on `diagnosing-bugs` from [mattpocock/skills](https://github.com/mattpocock/skills) by Matt Pocock.
-- [invariant-check](skills/invariant-check) merges `create-formal-verification-skill` and `maintain-formal-verification-skill` from [pstack](https://github.com/cursor/plugins/tree/main/pstack) by Lauren Tan.
-- [statechart](skills/statechart) is based on `statechart` from [pstack](https://github.com/cursor/plugins/tree/main/pstack) by Lauren Tan, edited so agents can load it.
-- `bro`, `teach`, `how`, `unslop`, and `why` are based on skills from [pstack](https://github.com/cursor/plugins/tree/main/pstack) by Lauren Tan. `bro`, `teach`, and `unslop` are unchanged; `how` and `why` have Cursor-specific wording normalized.
-
-`find-state-machine` uses a prompt posted by [Steve Ruiz](https://x.com/steveruizok/status/2116552016218710389) on 31 October 2026.
+- from [pstack](https://github.com/cursor/plugins/tree/main/pstack)
+  - [invariant-check](skills/invariant-check) merges `create-formal-verification-skill` and `maintain-formal-verification-skill`
+  - `statechart`, `bro`, `teach`, `how`, `unslop`, and `why` are based on skills from pstack. `bro`, `teach`, and `unslop` are unchanged; `how` and `why` have Cursor-specific wording normalized.
+- `find-state-machine` uses a prompt posted by [Steve Ruiz](https://x.com/steveruizok/status/2116552016218710389) on 31 October 2026.
 
 ## License
 

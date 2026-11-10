@@ -11,7 +11,8 @@ rewrite.
 ## What it does
 
 1. Scans for the tell patterns listed in `SKILL.md` (content, language,
-   style, communication artifacts, filler, jargon, plain speech).
+   style, communication artifacts, filler, jargon, plain speech,
+   structure).
 2. Rewrites. Preserves meaning and matches the intended tone.
 3. Adds soul: opinions, varied rhythm, first person where it fits, specifics.
 

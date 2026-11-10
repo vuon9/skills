@@ -78,3 +78,29 @@ Removing patterns is half the job. Sterile, voiceless writing is just as obvious
 30. **Cut adverbs, or use a stronger verb.** "runs quickly" becomes "is fast" or the number. "significantly improves" becomes the measured delta. An adverb propping up a weak verb means the verb is wrong.
 31. **Prefer the plain word.** "utilize" becomes "use", "leverage" becomes "use", "facilitate" becomes "help", "numerous" becomes "many", "in the event that" becomes "if". The fancier synonym is rarely clearer.
 32. **Give every number a referent, or cut it.** A figure with no noun saying what it measures, over what window, and for whom is a maintenance trap: the reader cannot check it, and nothing marks it as stale later. A count that will change as the thing grows ("eight skills") is the same trap in miniature. Keep numbers for claims that need proof, not as decoration. Scattering digits through prose ("3 of the 5 services, 2 with 14 retries") reads like a dashboard leaked into a paragraph; a sentence making no quantitative claim needs no number. Pick one form and stay with it, `3` or `three`, not both in the same text.
+
+### Structure
+
+Short, clean sentences can still add up to text nobody can follow. These patterns live at the paragraph level.
+
+33. **Jargon headline.** The first line leans on a label coined during the work, such as "Pinned holds survive the shuffle" or "the staging run", before anything explains it. Open with what changed, in words the reader already uses. Explain each label before you lean on it.
+34. **Discovery order.** The text follows the order the writer found things in: verdict, background, mechanism, a side case, evidence, the fix, then one more fact. Reorder for the reader. Background, then how it works, then what changed, then the evidence. When two versions differ, state what they share once, then the difference. Side cases and gaps go last, in their own short block.
+35. **Numbers woven through the explanation.** Counts, dates, and IDs placed between the steps of an explanation make the reader hold figures while following the logic. A number may stay in an explanation sentence when the noun it counts sits beside it, one number per sentence. Evidence goes after the explanation in a short list, one claim per line.
+
+Before:
+
+> Pinned holds survive the shuffle (not in the staging run: it ends before the shuffle). Both flows set a returned book aside for the first patron waiting. A patron with an expired card gets no hold and goes to the front desk. Since April 2, the old flow gave away 6 held copies at 2 branches, and at one branch 4 patrons came in for books that were gone. The old flow only marks the copy, so the nightly shuffle hands it to the next patron. The new flow pins it, and the shuffle skips it.
+
+After:
+
+> **A returned book held for a patron now stays on the hold shelf overnight.**
+>
+> When a held book comes back, the library sets the copy aside for the patron who asked first. Every night, a job called the shuffle moves free copies to the patrons who have waited longest. The old flow only marked the copy as set aside, and the shuffle did not check that mark, so it could hand the copy to someone else. The new flow pins the copy to the patron, and the shuffle skips pinned copies.
+>
+> What the old flow did since April 2:
+> - It gave away 6 held copies across 2 branches.
+> - At one branch, 4 patrons came in for books that were already gone.
+>
+> Not covered:
+> - A patron with an expired card gets no hold. The front desk handles it.
+> - The staging run ends before the shuffle, so it does not exercise this change.

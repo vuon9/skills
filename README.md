@@ -21,10 +21,9 @@ npx skills add -g vuon9/skills --skill diagnosing-bugs
 - [how](skills/how). Explain how a subsystem works, with evidence from the code. Needs a harness with subagents.
 - [why](skills/why). Investigate why a change was made or a design was picked. Needs optional source access: git history, tracker, docs, chat, observability, analytics.
 - [teach](skills/teach). Teach a body of work plainly, at the person's pace. Needs `how` and `why`, plus `unslop`.
-- [walk-me](skills/walk-me). Work through questions or open decisions one item at a time. Needs a harness with subagents; optional `how` and `why` from [pstack](https://github.com/cursor/plugins/tree/main/pstack).
-- [bro](skills/bro). Restate the last message in plain language.
+- [walk-me](skills/walk-me). Work through questions or open decisions one item at a time. Needs a harness with subagents; optional `how` and `why`.
+- [bro](skills/bro). Restate the last message so a reader new to the topic can follow it.
 - [find-real-cases](skills/find-real-cases). Ground a topic in a few real cases. Needs read access to production data (logs, errors, database), through MCP servers or CLIs.
-- [find-state-machine](skills/find-state-machine). Find the state machines an app encodes implicitly.
 
 **Debug and verify**
 
@@ -43,7 +42,7 @@ npx skills add -g vuon9/skills --skill diagnosing-bugs
 
 **Sessions**
 
-- [sidequest](skills/sidequest). Dig into one question in a forked session. Needs Ghostty 1.3+ on macOS or Rex, `jq`, and Claude Code or pi.
+- [sidequest](skills/sidequest). Dig into one question in a forked session. Needs Ghostty 1.3+ on macOS with the `use-ghostty` skill, or Rex. Also needs `jq`, and Claude Code or pi.
 - [where-are-we](skills/where-are-we). A recap of a session's goal, progress, and drift. Needs `jq`, and Claude Code or pi.
 
 **Tools**
@@ -68,8 +67,7 @@ Skills based on other people's work keep their copyright lines in the root `LICE
 - [diagnosing-bugs](skills/diagnosing-bugs) is based on `diagnosing-bugs` from [mattpocock/skills](https://github.com/mattpocock/skills) by Matt Pocock.
 - from [pstack](https://github.com/cursor/plugins/tree/main/pstack)
   - [invariant-check](skills/invariant-check) merges `create-formal-verification-skill` and `maintain-formal-verification-skill`
-  - `statechart`, `bro`, `teach`, `how`, `unslop`, and `why` are based on skills from pstack. `bro`, `teach`, and `unslop` are unchanged; `how` and `why` have Cursor-specific wording normalized.
-- `find-state-machine` uses a prompt posted by [Steve Ruiz](https://x.com/steveruizok/status/2116552016218710389) on 31 October 2026.
+  - `statechart`, `bro`, `teach`, `how`, `unslop`, and `why` are based on skills from pstack. `bro`, `teach`, and `unslop` carry local edits; `how` and `why` have Cursor-specific wording normalized.
 
 ## License
 

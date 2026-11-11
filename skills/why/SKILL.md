@@ -13,7 +13,7 @@ Companion to the `how` skill. `how` answers what the code does and how it works.
 
 Historical context spreads across seven evidence categories: source control history, issue or ticket tracking, long-form documents, real-time team chat, infrastructure observability, error or exception tracking, and product analytics warehouses. You cannot predict from the question alone which one holds the answer, so the skill enumerates available MCPs at run time, maps each to a category, queries all seven in parallel, then synthesizes with explicit confidence calibration. Null results from searched categories are first-class evidence about how the decision was made; report them alongside positive findings. The default is coverage, not minimalism.
 
-Every subagent below runs on the reasoning model: the value of `VSTACK_REASONING_MODEL` when it is set and your harness can choose a model per subagent (read it once, for example with `printenv VSTACK_REASONING_MODEL`), otherwise your current model. The subagent settings below (`subagent_type`, `model`, `readonly`) use one harness's Task-tool field names; map them to your harness's equivalent agent with the same read or write access.
+Every subagent below runs on the reasoning model: the value of `VSTACK_REASONING_MODEL` when it is set and your harness can choose a model per subagent (read it once, for example with `printenv VSTACK_REASONING_MODEL`), otherwise your current model. Each one is a general-purpose subagent.
 
 ## Operating Posture
 
@@ -115,10 +115,7 @@ Aim for a complete **coverage map**, not a minimal one. A null result from an is
 
 Launch all matching investigators in a single message so they run concurrently. One investigator per category lets each specialize in one tool's query vocabulary and result shape. Don't ask one agent to cover multiple MCPs.
 
-Subagent config (each):
-- `subagent_type`: `generalPurpose`
-- `model`: the reasoning model
-- `readonly`: `false` (agent mode). **Do not use a read-only mode.** It strips MCP access, which disables MCP-backed investigators entirely. The source control investigator would be safe in read-only, but keep modes uniform. Investigators still shouldn't write anything. That's a posture, not a sandbox.
+Subagent access (each): full tool access, not read-only. **Do not use a read-only mode.** It strips MCP access, which disables MCP-backed investigators entirely. The source control investigator would be safe in read-only, but keep modes uniform. Investigators still shouldn't write anything. That's a posture, not a sandbox.
 
 Each investigator gets:
 1. The base prompt from `references/investigator-prompt.md`
@@ -161,11 +158,7 @@ When the target is a single commit and its PR description fully answers the ques
 
 ## Step 4. Synthesize
 
-Spawn one synthesizer subagent:
-
-- `subagent_type`: `generalPurpose`
-- `model`: the reasoning model
-- `readonly`: `false` (agent mode). The synthesizer's quality check spot-verifies citations, which can require MCP access. A read-only mode strips MCPs and defeats that.
+Spawn one synthesizer subagent, with full tool access, not read-only. The synthesizer's quality check spot-verifies citations, which can require MCP access. A read-only mode strips MCPs and defeats that.
 
 The synthesizer gets:
 1. The investigator findings, including any null results and any categories skipped with justification

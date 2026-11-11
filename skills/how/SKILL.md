@@ -12,7 +12,7 @@ Two modes:
 1. **Explain** (default). Explore the codebase and produce a clear explanation
 2. **Critique.** Explain first, then spawn a critic to independently identify architectural issues
 
-Every subagent below runs on the reasoning model: the value of `VSTACK_REASONING_MODEL` when it is set and your harness can choose a model per subagent (read it once, for example with `printenv VSTACK_REASONING_MODEL`), otherwise your current model. The subagent settings below (`subagent_type`, `model`, `readonly`) use one harness's Task-tool field names; map them to your harness's equivalent agent with the same read or write access.
+Every subagent below runs on the reasoning model: the value of `VSTACK_REASONING_MODEL` when it is set and your harness can choose a model per subagent (read it once, for example with `printenv VSTACK_REASONING_MODEL`), otherwise your current model. Each one is a general-purpose subagent with read-only access.
 
 ## Explain Mode
 
@@ -44,11 +44,7 @@ Decompose the question into 2-4 parallel exploration angles, each a distinct sli
 
 The right decomposition depends on the question. Use your judgment. Narrow questions: 2 explorers is fine. Broad subsystems: up to 4.
 
-Spawn all explorers in a single message:
-
-- `subagent_type`: `generalPurpose`
-- `model`: the reasoning model
-- `readonly`: `true`
+Spawn all explorers in a single message.
 
 Each explorer gets the same base prompt from `references/explorer-prompt.md` plus a specific exploration angle naming its slice. Each explorer should:
 - Start broad: Glob for relevant directories, Grep for key types/interfaces/class names
@@ -69,11 +65,7 @@ Proceed to Step 4.
 
 ### Step 3. Synthesize (complex questions only)
 
-Once all explorers return, spawn a single Task subagent to synthesize their findings into one coherent explanation:
-
-- `subagent_type`: `generalPurpose`
-- `model`: the reasoning model
-- `readonly`: `true`
+Once all explorers return, spawn a single subagent to synthesize their findings into one coherent explanation.
 
 The explainer gets all explorers' findings and writes the human-facing explanation (output format below). Read `references/explainer-prompt.md` for the full prompt template. The explainer reconciles overlapping findings, resolves contradictions, and weaves the slices into a unified picture.
 
@@ -105,11 +97,7 @@ Run the full explain flow above (Steps 1-4). You must understand the architectur
 
 ### Step 2. Spawn a Critic
 
-After the explanation is complete, spawn one architectural critic:
-
-- `subagent_type`: `generalPurpose`
-- `model`: the reasoning model
-- `readonly`: `true`
+After the explanation is complete, spawn one architectural critic.
 
 Read `references/critic-prompt.md` for the prompt template. The critic gets:
 1. The explanation from Step 1 (so they don't re-explore)

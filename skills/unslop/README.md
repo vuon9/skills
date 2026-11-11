@@ -1,6 +1,6 @@
 # unslop
 
-Cut AI tells from any writing and add human voice. Must always apply.
+Cut AI tells from any writing and add human voice.
 
 ## When it applies
 

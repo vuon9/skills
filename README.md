@@ -67,7 +67,7 @@ Skills based on other people's work keep their copyright lines in the root `LICE
 - [diagnosing-bugs](skills/diagnosing-bugs) is based on `diagnosing-bugs` from [mattpocock/skills](https://github.com/mattpocock/skills) by Matt Pocock.
 - from [pstack](https://github.com/cursor/plugins/tree/main/pstack)
   - [invariant-check](skills/invariant-check) merges `create-formal-verification-skill` and `maintain-formal-verification-skill`
-  - `statechart`, `bro`, `teach`, `how`, `unslop`, and `why` are based on skills from pstack. `bro`, `teach`, and `unslop` carry local edits; `how` and `why` have Cursor-specific wording normalized.
+  - `statechart`, `teach`, `how`, `unslop`, and `why` are based on skills from pstack. `teach` and `unslop` carry local edits; `how` and `why` have Cursor-specific wording normalized.
 
 ## License
 

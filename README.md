@@ -22,7 +22,9 @@ npx skills add -g vuon9/skills --skill diagnosing-bugs
 - [why](skills/why). Investigate why a change was made or a design was picked. Needs optional source access: git history, tracker, docs, chat, observability, analytics.
 - [teach](skills/teach). Teach a body of work plainly, at the person's pace. Needs `how` and `why`, plus `unslop`.
 - [walk-me](skills/walk-me). Work through questions or open decisions one item at a time. Needs a harness with subagents; optional `how` and `why`.
-- [bro](skills/bro). Restate the last message so a reader new to the topic can follow it.
+- [bro](skills/bro). Restate the last message in plain language, with no jargon.
+- [explain-again](skills/explain-again). Restate the last message so a reader new to the topic can follow it, and draw a diagram in a terminal pane. The diagram needs macOS, Node, and [Pele](https://pele.run), in Rex or in Ghostty with `use-ghostty`.
+- [find-state-machine](skills/find-state-machine). Find every implicit state machine in an app, or dig into the one behind a named flow.
 - [find-real-cases](skills/find-real-cases). Ground a topic in a few real cases. Needs read access to production data (logs, errors, database), through MCP servers or CLIs.
 
 **Debug and verify**
@@ -67,7 +69,8 @@ Skills based on other people's work keep their copyright lines in the root `LICE
 - [diagnosing-bugs](skills/diagnosing-bugs) is based on `diagnosing-bugs` from [mattpocock/skills](https://github.com/mattpocock/skills) by Matt Pocock.
 - from [pstack](https://github.com/cursor/plugins/tree/main/pstack)
   - [invariant-check](skills/invariant-check) merges `create-formal-verification-skill` and `maintain-formal-verification-skill`
-  - `statechart`, `teach`, `how`, `unslop`, and `why` are based on skills from pstack. `teach` and `unslop` carry local edits; `how` and `why` have Cursor-specific wording normalized.
+  - `bro`, `statechart`, `teach`, `how`, `unslop`, and `why` are based on skills from pstack. `bro` is unchanged; `teach` and `unslop` carry local edits; `how` and `why` have Cursor-specific wording normalized.
+- [find-state-machine](skills/find-state-machine) uses a prompt posted by [Steve Ruiz](https://x.com/steveruizok/status/2116552016218710389) on 31 October 2026.
 
 ## License
 

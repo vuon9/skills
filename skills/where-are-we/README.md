@@ -36,7 +36,3 @@ reads them from there.
 
 - Claude Code, for `context: fork`, or pi, for `subagent`.
 - `jq`.
-
-## TODO
-
-- OpenCode support.

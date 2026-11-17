@@ -14,7 +14,7 @@ Only for runs with a big change. Copy this shape into `round-<NN>.md` and includ
 
 ### 1. <short title of the change>
 
-- From: agent (opencode) | human
+- From: agent (pi) | human
 - Where: src/app.py:42 (new), plus other files touched
 
 > <the note, quoted, trimmed to the point>

@@ -1,6 +1,6 @@
 # skills
 
-Agent skills by Vuong. They work in any harness that reads `SKILL.md` folders, such as Claude Code, OpenCode, and pi.
+Agent skills by Vuong. They support Claude Code and pi.
 
 ## Install
 

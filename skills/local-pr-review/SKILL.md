@@ -31,7 +31,7 @@ hunk session comment add SELECTOR --file PATH --new-line N --summary "..." --aut
 
 ## Your label
 
-Pick one author label for this harness and use it on every note, for example `claude-code`, `opencode`, `codex`, or `pi`. Add a suffix if two instances of the same harness address notes at once. The label is how `fetch` tells your notes from the user's and other agents', so never change it mid-review.
+Pick one author label for this harness and use it on every note, for example `claude-code` or `pi`. Add a suffix if two instances of the same harness address notes at once. The label is how `fetch` tells your notes from the user's and other agents', so never change it mid-review.
 
 ## Steps
 

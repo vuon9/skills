@@ -39,7 +39,7 @@ class TestRounds(unittest.TestCase):
 
 class TestPendingThreads(unittest.TestCase):
     def test_other_agent_note_is_pending(self):
-        items = pending_threads([note("mcp:1", "opencode")], "claude-code")
+        items = pending_threads([note("mcp:1", "pi")], "claude-code")
         self.assertEqual(len(items), 1)
         self.assertEqual(items[0]["thread"], "mcp:1")
         self.assertEqual(items[0]["from"], "agent")
@@ -68,7 +68,7 @@ class TestPendingThreads(unittest.TestCase):
 
     def test_threads_are_grouped_by_root(self):
         notes = [
-            note("mcp:1", "opencode"),
+            note("mcp:1", "pi"),
             note("mcp:2", "codex"),
             note("user:3", "user", "user", parent="mcp:1"),
         ]
@@ -77,7 +77,7 @@ class TestPendingThreads(unittest.TestCase):
         self.assertEqual([n["id"] for n in items[0]["notes"]], ["mcp:1", "user:3"])
 
     def test_old_side_anchor(self):
-        n = note("mcp:1", "opencode")
+        n = note("mcp:1", "pi")
         del n["newRange"]
         n["oldRange"] = [7, 7]
         self.assertEqual(pending_threads([n], "me")[0]["where"], "app.py:7 (old)")

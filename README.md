@@ -55,6 +55,7 @@ npx skills add -g vuon9/skills --skill diagnosing-bugs
 **Build and ship**
 
 - [apple-ship](skills/apple-ship). Build, sign, notarize, and release iOS and macOS apps. Needs macOS with Xcode, and `gh` for the release workflows.
+- [terminal-demo](skills/terminal-demo). Record a demo video of a terminal app, with a subtitle for each key, on a made-up machine. Needs Docker, Python 3, and ffmpeg.
 
 ## Tests
 

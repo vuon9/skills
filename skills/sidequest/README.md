@@ -12,7 +12,10 @@ so nothing runs until you do.
 
 The fork has the whole conversation and all tools. The draft asks it to stay
 on the question, to explore without editing files (or to make its own
-worktree if it must), and to end with a summary you can paste back.
+worktree if it must), and to ask you one thing when it is done: send its
+summary to the main chat, or keep digging in the side chat. On a yes the fork
+sends the summary itself, as a message to the main session. pi has no way to
+message another session, so there the fork puts the summary in its reply.
 
 ## How it works
 
@@ -40,6 +43,15 @@ guess: when neither Ghostty nor Rex is there, it hands you the draft instead.
 | --- | --- |
 | Ghostty | the `use-ghostty` skill's script, `scripts/ghostty.js` |
 | Rex | the `rex` command, using `REX_SESSION` and `REX_BLOCK` from the environment |
+
+Rex keeps those two ids in a pane's environment for as long as the pane lives.
+After a Rex restart, or in a background session, the server no longer has
+them. The skill then splits the focused block of the one live session, and
+asks you which session to use when there are several.
+
+The fork starts in the folder the session began in, read from its transcript,
+because `claude --resume` finds a session by that folder and the agent's shell
+may have moved since.
 
 Both branches split to the right, wait for the fork's input box, and paste the
 draft as a bracketed paste so the app does not submit it. Ghostty's `send`

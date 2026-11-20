@@ -48,10 +48,18 @@ if [ -n "${PI_SESSION_FILE:-}" ]; then
   parent_name=$(jq -r 'select(.type == "session_info") | .name // empty' "$PI_SESSION_FILE" | tail -1)
   parent_title="π - ${parent_name:-$(basename "$PWD")}"
   ready='escape interrupt|\([a-z0-9._-]+\) [^ ]+ •'
+  dir=$PWD
 else
-  sid=$CLAUDE_SESSION_ID
+  sid=${CLAUDE_CODE_SESSION_ID:-${CLAUDE_SESSION_ID:-}}
   f=$(ls -t ~/.claude/projects/*/"$sid".jsonl | head -1)
+  if [ -z "$sid" ] || [ -z "$f" ]; then
+    printf 'no transcript found for session id "%s"; give the draft to the user in the reply instead\n' "$sid"
+    exit 1
+  fi
   parent_name=$(jq -r 'select(.type == "agent-name") | .agentName' "$f" | tail -1)
+  # claude looks a session up under the folder it started in, and the shell
+  # may have moved since.
+  dir=$(jq -rn 'first(inputs | .cwd // empty)' "$f")
   fork=(claude --resume "$sid" --fork-session)
   ready='shift\+tab to cycle|\? for shortcuts'
 fi
@@ -61,9 +69,13 @@ Sidequest: <the question, sharpened>
 
 Context: <one or two lines: why it came up, what we already know or tried>
 Go deep on this question only. Read code, docs, and logs as needed. Do not edit files; if a change is needed, make your own worktree first.
-When done, end with a short summary I can paste back into the main chat.
 EOF
 )
+# The main chat's name goes into the draft so the fork knows where to send its
+# summary. An unnamed Claude Code session is addressed by its id.
+main_chat=${parent_name:-${sid:-$(basename "$PWD")}}
+draft="$draft
+When done, follow step 6 of the sidequest skill: ask me whether to send your summary to the main chat \"$main_chat\" or to keep digging here."
 
 forkname="sq: <topic> (${parent_name:-$(basename "$PWD")})"
 fork+=(--name "$forkname")
@@ -79,9 +91,9 @@ if [ "$app" = ghostty ]; then
     exit 1
   fi
   if [ -n "${PI_SESSION_FILE:-}" ]; then
-    new=$("$G" split "$panes" right --cwd "$PWD" --wait-after --env "PATH=$PATH" --cmd "$(printf '%q ' "${fork[@]}")")
+    new=$("$G" split "$panes" right --cwd "$dir" --wait-after --env "PATH=$PATH" --cmd "$(printf '%q ' "${fork[@]}")")
   else
-    new=$("$G" split "$panes" right --cwd "$PWD" --input "$(printf '%q ' "${fork[@]}")"$'\n')
+    new=$("$G" split "$panes" right --cwd "$dir" --input "$(printf '%q ' "${fork[@]}")"$'\n')
   fi
   if ! "$G" wait "$new" "$ready" --timeout 60 >/dev/null; then
     printf 'the fork did not reach its input box, read it and hand the draft to the user:\n'
@@ -92,11 +104,22 @@ if [ "$app" = ghostty ]; then
   sleep 2
   "$G" read "$new" --tail 12
 else
-  if [ -z "${REX_SESSION:-}" ] || [ -z "${REX_BLOCK:-}" ]; then
-    printf 'REX_SESSION or REX_BLOCK is missing; give the draft to the user in the reply instead\n'
-    exit 1
+  # REX_SESSION and REX_BLOCK name the pane this process started in. After a Rex
+  # restart, or in a background session, the server no longer has them, so
+  # split the focused block of the one live session instead.
+  rs=${REX_SESSION:-}
+  anchor=(-b "${REX_BLOCK:-}")
+  if [ -z "$rs" ] || [ -z "${REX_BLOCK:-}" ] || ! "$R" block inspect -s "$rs" "$REX_BLOCK" >/dev/null 2>&1; then
+    live=$("$R" session list --json 2>/dev/null | jq -r '.sessions[]?.session_id')
+    if [ "$(printf '%s' "$live" | grep -c .)" -ne 1 ]; then
+      printf 'this pane is not in a live Rex session and no single session is left to pick, ask the user which one:\n'
+      "$R" session list 2>&1
+      exit 1
+    fi
+    rs=$live
+    anchor=()
   fi
-  split=$("$R" split -s "$REX_SESSION" -b "$REX_BLOCK" --split=right --cwd "$PWD" --json -- "${fork[@]}" 2>&1) || {
+  split=$("$R" split -s "$rs" "${anchor[@]}" --split=right --cwd "$dir" --json -- "${fork[@]}" 2>&1) || {
     printf 'the split failed, read the message and hand the draft to the user:\n%s\n' "$split"
     exit 1
   }
@@ -109,7 +132,7 @@ else
   # safe here: the forked conversation repeats the words the screen markers use.
   title_ready=
   for _ in $(seq 1 60); do
-    title=$("$R" block call -s "$REX_SESSION" -b "$new" title 2>/dev/null | jq -r '.title // empty' 2>/dev/null)
+    title=$("$R" block call -s "$rs" -b "$new" title 2>/dev/null | jq -r '.title // empty' 2>/dev/null)
     if [ -n "${PI_SESSION_FILE:-}" ]; then
       [ "${title#π - }" != "$title" ] && title_ready=1 && break
     elif [ -n "$parent_name" ] && [ "${title#*"$parent_name"}" != "$title" ]; then
@@ -120,26 +143,28 @@ else
   done
   if [ -z "$title_ready" ]; then
     printf 'the fork did not reach its input box, read it and hand the draft to the user:\n'
-    "$R" capture -s "$REX_SESSION" -b "$new" --trim 2>&1 | tail -20
+    "$R" capture -s "$rs" -b "$new" --trim 2>&1 | tail -20
     exit 1
   fi
   # The paste markers below only work when the app asked for bracketed paste.
   # A pane that did not ask would show them as literal text.
-  paste=$("$R" block call -s "$REX_SESSION" -b "$new" modes 2>/dev/null | jq -r '.modes[]? | select(.name == "bracketed_paste") | .set' 2>/dev/null)
+  paste=$("$R" block call -s "$rs" -b "$new" modes 2>/dev/null | jq -r '.modes[]? | select(.name == "bracketed_paste") | .set' 2>/dev/null)
   if [ "$paste" = false ]; then
     printf 'the fork did not enable bracketed paste, so the draft cannot be pasted unsent; hand it to the user in the reply:\n'
     exit 1
   fi
-  printf '\033[200~%s\033[201~' "$draft" | "$R" send -s "$REX_SESSION" -b "$new"
+  printf '\033[200~%s\033[201~' "$draft" | "$R" send -s "$rs" -b "$new"
   sleep 2
-  "$R" capture -s "$REX_SESSION" -b "$new" --trim 2>&1 | tail -12
+  "$R" capture -s "$rs" -b "$new" --trim 2>&1 | tail -12
 fi
 ```
 
 ## 4. Check what it opened
 
-The script exits non-zero in four cases worth a reply, not a retry loop.
+The script exits non-zero in six cases worth a reply, not a retry loop.
 
+- **No transcript for the session id.** Say which id it read, and give the draft in your reply.
+- **No live Rex session to pick.** The pane's own session is gone and Rex has none or several. Show the list it printed and ask which session to split, then run the script again with `rs` set to that id.
 - **No Ghostty or Rex terminal.** Say which app it found, and give the draft in your reply so the user can paste it into a fork by hand.
 - **No single pane matched.** The user has more than one terminal holding this project, or the session has no name yet. Ask which pane to use, then run the script again with that id in place of `$panes`.
 - **The fork never reached its input box.** Read the pane it printed. A startup dialog may be open. Leave it for the user, and give them the draft in your reply instead.
@@ -150,3 +175,14 @@ Otherwise read the printed input box. Claude Code collapses a long paste into a 
 ## 5. Report
 
 One line: the question, and that the draft is waiting in the new split for the user to edit and send.
+
+## 6. In the fork, when the dig is done
+
+This step is for the forked copy, not the session that ran the script. The draft's last line sends you here.
+
+Give your findings in the side chat first. Then ask the user one question with two choices, using the question tool when the harness has one:
+
+- **Send the summary to the main chat.** Only on this answer, send a short summary to the session the draft names. In Claude Code, list the peer sessions, find that name, and send with the session message tool. The first line says it is the sidequest's summary and names the question. Then say in the side chat that it was sent.
+- **Keep digging here.** Send nothing. Carry on in the side chat, and ask the same question again at the next natural stop.
+
+Never send to the main chat without that yes, and never tell the user to copy the summary across by hand. When the main chat is not listed, or the harness has no way to message another session (pi), say so and put the summary in your reply.

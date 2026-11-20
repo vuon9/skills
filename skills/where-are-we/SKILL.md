@@ -47,7 +47,7 @@ if [ -n "${PI_SESSION_FILE:-}" ]; then
         else empty end
     else empty end' "$f"
 else
-  f=$(ls -t ~/.claude/projects/*/"${SID:-$CLAUDE_SESSION_ID}".jsonl | head -1)
+  f=$(ls -t ~/.claude/projects/*/"${SID:-${CLAUDE_CODE_SESSION_ID:-${CLAUDE_SESSION_ID:-}}}".jsonl | head -1)
   jq -r '
     select((.type == "user" or .type == "assistant") and .isMeta != true and .isSidechain != true)
     | if .isCompactSummary then "\nsummary: \(.message.content | if type == "string" then . else map(.text? // empty) | join(" ") end)"

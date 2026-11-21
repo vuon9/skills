@@ -1,18 +1,20 @@
 ---
-name: invariant-check
-description: "Use when a rule the code must never break needs more than tests, such as a race, a retry, a double charge, or a state that should be impossible, or when code covered by an existing invariant check changed without the check being rerun. Sets up a formal check of the rule, reruns it, or brings it back in line with the code, and decides which from the checks already in the repo. Use for /invariant-check."
+name: project-prove-rule
+description: "Use when a rule the code must never break needs more than tests, such as a race, a retry, a double charge, or a state that should be impossible, or when code covered by an existing invariant check changed without the check being rerun. Sets up a formal check of the rule, reruns it, or brings it back in line with the code, and decides which from the checks already in the repo. Use for /project-prove-rule."
 disable-model-invocation: true
 ---
 
-# Invariant check
+# Project prove rule
 
 A test checks the cases that someone thought to write. A formal check covers every case in a stated scope: every order of steps in a model, every input up to a bound, or every input. An invariant is a rule the code promises to keep, such as "stock never goes below zero" or "a customer is charged at most once per order".
 
 Each check lives in the repo as a project skill named `verify-<area>`. The next agent that changes the covered code loads that skill and reruns the check. This skill sets checks up, and brings them back in line with the code when changes skipped them.
 
 ```
-/invariant-check [new | recheck] [what]
+/project-prove-rule [new | recheck] [what]
 ```
+
+This skill proves a rule about what the running code does. A mistake in how code is written, such as a wrong import or a copied pattern, is `correct-me`'s job: it makes the mistake impossible with structure, types, a lint, or a test.
 
 `what` is a rule, an area, a bug, or a piece of code, in any words. `new` and `recheck` force a path. With `what`, Match on code finds the check. Without it, Pick the check does.
 
@@ -20,7 +22,7 @@ Each check lives in the repo as a project skill named `verify-<area>`. The next 
 
 Do this first, on every run, with or without a mode word.
 
-1. List the project skills that this skill created: the ones whose frontmatter has `created-by: invariant-check` under `metadata`, in the repo's skill folders (`.claude/skills/` in Claude Code).
+1. List the project skills that this skill created: the ones whose frontmatter has `created-by: project-prove-rule` under `metadata`, or `created-by: invariant-check`, the name this skill had before, in the repo's skill folders (`.claude/skills/` in Claude Code).
 2. From each one, read its Coverage: the rules, the files and functions, the last confirmed commit, and the run command. When a check has no Coverage section, or its last confirmed commit is not in the current branch's history (`git merge-base --is-ancestor <commit> HEAD` fails, as after a squash merge or a rebase), use the last commit that changed the check's folder instead. Say so in the report.
 3. For each one, see whether its covered code changed since the last confirmed commit: `git log <commit>..HEAD` on the covered files, following renames.
 
@@ -63,7 +65,7 @@ Every check skill uses this shape. The `created-by` marker lets the next run fin
 name: verify-<area>
 description: Use when changing <the covered code, in this repo's words>, or before merging a change to it. Checks that <the rule, in one plain sentence> with <tool>.
 metadata:
-  created-by: invariant-check
+  created-by: project-prove-rule
 ---
 
 # Verify <area>

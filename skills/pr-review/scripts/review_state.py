@@ -6,8 +6,10 @@ Usage:
 
 Prints JSON: the current branch's pull request and how many of its review
 items are unhandled, how many note threads wait on LABEL in this repo's live
-Hunk session, and the route that follows. `pr` is null when the branch has no
-pull request. `hunk` is null when no Hunk session is live for this repo.
+Hunk session, and the route that follows: `github`, `local`, `confirm` when the
+user has to say which of the two they mean, or `choose` when nothing waits.
+`pr` is null when the branch has no pull request. `hunk` is null when no Hunk
+session is live for this repo.
 """
 
 import json
@@ -18,8 +20,14 @@ import hunk_notes
 import pr_threads
 
 
-def route(pr_pending: int, hunk_pending: int) -> str:
-    """`github` when the PR has feedback, else `local` when Hunk has notes, else `choose`."""
+def route(pr_pending: int, hunk_pending) -> str:
+    """Where to work. ``hunk_pending`` is None when no Hunk session is live.
+
+    One place with feedback is the route. The PR with feedback next to a live
+    Hunk session is `confirm`: the user says which one they mean.
+    """
+    if pr_pending and hunk_pending is not None:
+        return "confirm"
     if pr_pending:
         return "github"
     if hunk_pending:
@@ -49,7 +57,7 @@ def main(argv):
         sys.exit(__doc__)
     pr, hunk = pr_state(), hunk_state(argv[1])
     print(json.dumps({
-        "route": route(pr["pending"] if pr else 0, hunk["pending"] if hunk else 0),
+        "route": route(pr["pending"] if pr else 0, hunk["pending"] if hunk else None),
         "pr": pr,
         "hunk": hunk,
     }, indent=2))

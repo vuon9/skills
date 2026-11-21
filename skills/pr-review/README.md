@@ -7,9 +7,10 @@ your machine before a PR exists. It replaces `github-pr-review` and
 ## Use it with a prompt
 
 - `/pr-review` -> looks for feedback and works on it. A PR with new comments
-  comes first, then notes in a live Hunk session. When nothing is waiting, it
-  asks whether you want a review with an agent, a review with you in Hunk, or
-  nothing.
+  comes first, then notes in a live Hunk session. When both could be meant,
+  it asks which one, or both, and does nothing until you answer. When nothing
+  is waiting, it asks whether you want a review with an agent, a review with
+  you in Hunk, or nothing.
 - `/pr-review do it with devin` -> Devin reviews the local diff, and the agent
   fixes and answers what it finds.
 - `/pr-review do it local` -> the same, with the default reviewer: Devin when

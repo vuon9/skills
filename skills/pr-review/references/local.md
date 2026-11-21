@@ -56,7 +56,7 @@ stateDiagram-v2
 - How:
   - With Hunk: run `hunk_notes.py fetch --me LABEL [SELECTOR]`. It returns the threads whose last note is not yours, grouped by root. `from` is `human` or `agent`, and `reply_to` is the note to reply to.
   - Without Hunk: read the findings file.
-  - Take each one through "Handle one finding" in SKILL.md.
+  - Take each one through `references/finding.md`.
   - With Hunk, reply to every thread, `noted` ones too, so it stops waiting on you. Post all replies as one batch:
 
     ```bash

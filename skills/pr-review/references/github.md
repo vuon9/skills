@@ -30,7 +30,7 @@ stateDiagram-v2
 - Enter: there are items.
 - How:
   - Collect every item first, from every reviewer, before you change anything. Two that touch the same code get one fix. One that contradicts another is an `ask`.
-  - Take each item through "Handle one finding" in SKILL.md. `outdated: true` means the line moved or changed, so read the current code.
+  - Take each item through `references/finding.md`. `outdated: true` means the line moved or changed, so read the current code.
   - Write each item's consideration into the round file as you finish it, not at the end. Keep the `<!-- ids: ... -->` line under each item exactly as `fetch` gave it. Those ids are how later rounds know what is handled.
   - When the user answers the `ask` batch, write each answer into that item's **Decision**, then apply it and verify.
 - Leave when: every item has a class, and every easy one is done. An item the user has not answered stays `waiting on you`, and nothing is posted for it.

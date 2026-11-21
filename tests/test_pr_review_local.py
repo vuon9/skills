@@ -42,12 +42,15 @@ class TestRounds(unittest.TestCase):
 
 
 class TestRoute(unittest.TestCase):
-    def test_feedback_on_the_pr_comes_first_then_hunk_notes(self):
+    def test_one_place_with_feedback_is_the_route_and_two_need_the_user(self):
+        """`hunk` is the count of waiting threads, or None when no session is live."""
         rows = [
-            {"id": "pr_has_feedback", "pr": 2, "hunk": 0, "route": "github"},
-            {"id": "both_have_feedback", "pr": 1, "hunk": 3, "route": "github"},
+            {"id": "pr_has_feedback_no_hunk", "pr": 2, "hunk": None, "route": "github"},
+            {"id": "pr_has_feedback_hunk_live_and_idle", "pr": 2, "hunk": 0, "route": "confirm"},
+            {"id": "both_have_feedback", "pr": 1, "hunk": 3, "route": "confirm"},
             {"id": "only_hunk_has_notes", "pr": 0, "hunk": 3, "route": "local"},
-            {"id": "nothing_waiting", "pr": 0, "hunk": 0, "route": "choose"},
+            {"id": "hunk_live_and_idle", "pr": 0, "hunk": 0, "route": "choose"},
+            {"id": "nothing_anywhere", "pr": 0, "hunk": None, "route": "choose"},
         ]
         results = {row["id"]: route(row["pr"], row["hunk"]) for row in rows}
         self.assertEqual(results, {row["id"]: row["route"] for row in rows})

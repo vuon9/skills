@@ -23,7 +23,6 @@ npx skills add -g vuon9/skills --skill diagnosing-bugs
 - [teach](skills/teach). Teach a body of work plainly, at the person's pace. Needs `how` and `why`, plus `unslop`.
 - [walk-me](skills/walk-me). Work through questions or open decisions one item at a time. Needs a harness with subagents; optional `how` and `why`.
 - [bro](skills/bro). Restate the last message in plain language, with no jargon.
-- [explain-again](skills/explain-again). Restate the last message so a reader new to the topic can follow it, and draw a diagram in a terminal pane. The diagram needs macOS, Node, and [Pele](https://pele.run), in Rex or in Ghostty with `use-ghostty`.
 - [find-state-machine](skills/find-state-machine). Find every implicit state machine in an app, or dig into the one behind a named flow.
 - [find-real-cases](skills/find-real-cases). Ground a topic in a few real cases. Needs read access to production data (logs, errors, database), through MCP servers or CLIs.
 

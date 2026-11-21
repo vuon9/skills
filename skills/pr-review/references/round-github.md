@@ -35,7 +35,7 @@ Copy this shape into `round-<NN>.md`. One `###` block per item, in the order you
 
 **Consideration.** What the code does at that line, whether the claim holds, and the evidence.
 
-**Class.** fix | dismiss | ask | note. Easy-to-go: yes | no.
+**Class.** fix | dismiss | confirm | clarify | ask | noted. Easy: yes | no.
 
 **Picture.** Only when framed. What the code does now, what the comment claims, what is at stake.
 
@@ -43,7 +43,7 @@ Copy this shape into `round-<NN>.md`. One `###` block per item, in the order you
 1. <option> (Recommended). <why>
 2. <option>. <tradeoff>
 
-**Decision.** What was decided and by whom (agent for easy-to-go, user for framed). Open items say `open`.
+**Decision.** What was decided and by whom (agent for an easy one, user for a framed one). Open items say `open`.
 
 **Answer.** The reply text, as posted or as a draft for the user.
 

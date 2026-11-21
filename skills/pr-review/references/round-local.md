@@ -21,7 +21,7 @@ Only for runs with a big change. Copy this shape into `round-<NN>.md` and includ
 
 **Why it is big.** Which rule made it big (design decision, public interface, behavior, spans files).
 
-**Options.** Only when it was a decide item.
+**Options.** Only when it was an `ask` item.
 1. <option> (Recommended). <why>
 2. <option>. <tradeoff>
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""PR review feedback helper for the github-pr-review skill.
+"""PR review feedback helper for the pr-review skill.
 
 Usage:
   pr_threads.py open-round [PR]            Print the next round file path and PR facts as JSON.
@@ -16,11 +16,11 @@ agents (for agents that post through a personal account).
 import json
 import os
 import re
-import subprocess
 import sys
 from pathlib import Path
 
-ROUND_RE = re.compile(r"^round-(\d+)\.md$")
+from rounds import feedback_dir, next_round, round_facts, run  # noqa: F401
+
 NODE_ID_RE = re.compile(r"\b(?:PRRT|PRRC|PRR|IC)_[A-Za-z0-9_-]+")
 
 PR_QUERY = """
@@ -61,13 +61,6 @@ mutation($thread: ID!) {
   resolveReviewThread(input: {threadId: $thread}) { thread { isResolved } }
 }
 """
-
-
-def next_round(pr_dir: Path) -> int:
-    if not pr_dir.is_dir():
-        return 1
-    numbers = [int(m.group(1)) for p in pr_dir.iterdir() if (m := ROUND_RE.match(p.name))]
-    return max(numbers, default=0) + 1
 
 
 def seen_ids(pr_dir: Path) -> set:
@@ -128,10 +121,6 @@ def pending_items(pr: dict, viewer: str, seen: set, extra=frozenset()) -> list:
     return items
 
 
-def run(*args) -> str:
-    return subprocess.run(args, check=True, capture_output=True, text=True).stdout.strip()
-
-
 def graphql(query, **variables):
     args = ["gh", "api", "graphql", "-f", f"query={query}"]
     for key, value in variables.items():
@@ -144,13 +133,11 @@ def pr_number(arg):
 
 
 def pr_dir(number: int) -> Path:
-    common = Path(run("git", "rev-parse", "--path-format=absolute", "--git-common-dir"))
-    exclude = common / "info" / "exclude"
-    exclude.parent.mkdir(parents=True, exist_ok=True)
-    lines = exclude.read_text(encoding="utf-8").splitlines() if exclude.exists() else []
-    if "/.pr-feedback/" not in lines:
-        exclude.write_text("\n".join(lines + ["/.pr-feedback/"]) + "\n", encoding="utf-8")
-    return common.parent / ".pr-feedback" / f"pr-{number}"
+    return feedback_dir(f"pr-{number}")
+
+
+def extra_agents() -> set:
+    return {s.strip() for s in os.environ.get("PR_FEEDBACK_AGENTS", "").split(",") if s.strip()}
 
 
 def fetch_pr(number: int):
@@ -165,23 +152,17 @@ def main(argv):
     command, rest = argv[0], argv[1:]
     if command == "open-round":
         number = pr_number(rest[0] if rest else None)
-        directory = pr_dir(number)
-        directory.mkdir(parents=True, exist_ok=True)
-        n = next_round(directory)
         _, pr = fetch_pr(number)
         print(json.dumps({
             "pr": number,
             "url": pr["url"],
             "head": pr["headRefOid"],
-            "round": n,
-            "path": str(directory / f"round-{n:02d}.md"),
-            "previous": [str(p) for p in sorted(directory.glob("round-*.md"))],
+            **round_facts(pr_dir(number)),
         }, indent=2))
     elif command == "fetch":
         number = pr_number(rest[0] if rest else None)
-        extra = {s.strip() for s in os.environ.get("PR_FEEDBACK_AGENTS", "").split(",") if s.strip()}
         viewer, pr = fetch_pr(number)
-        print(json.dumps(pending_items(pr, viewer, seen_ids(pr_dir(number)), extra), indent=2))
+        print(json.dumps(pending_items(pr, viewer, seen_ids(pr_dir(number)), extra_agents()), indent=2))
     elif command == "reply":
         body = Path(rest[1]).read_text(encoding="utf-8")
         print(graphql(REPLY_MUTATION, thread=rest[0], body=body)["addPullRequestReviewThreadReply"]["comment"]["url"])

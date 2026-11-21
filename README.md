@@ -34,8 +34,7 @@ npx skills add -g vuon9/skills --skill diagnosing-bugs
 
 **Review and land**
 
-- [local-pr-review](skills/local-pr-review). Answer notes in a live Hunk review session. Needs [Hunk](https://github.com/modem-dev/hunk) and Python 3; the `hunk-review` skill ships with Hunk.
-- [github-pr-review](skills/github-pr-review). Work through review comments on a GitHub PR, one at a time. Needs `gh`, signed in, and Python 3.
+- [pr-review](skills/pr-review). Handle review feedback on a GitHub PR or on your machine: fix easy findings, frame hard ones as options, answer every thread, and get a review from Devin or another agent before a PR exists. Needs Python 3, `gh` signed in for GitHub, and [Hunk](https://github.com/modem-dev/hunk) for a review with you; the `hunk-review` skill ships with Hunk.
 
 **Write**
 

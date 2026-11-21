@@ -1,12 +1,14 @@
 ---
 name: sidequest
-description: "Use when the user types /sidequest, with or without a question, to dig into one question in a forked copy of this conversation. Opens the fork in a split beside the current pane, in Ghostty or Rex, with a drafted deep-dive prompt in its input box for the user to edit and send."
+description: "Use when the user types /sidequest, with or without a question, to dig into one question in a forked copy of this conversation. Opens the fork in a split beside the current pane, in Ghostty or Rex, and sends a drafted deep-dive prompt there, so the dig starts at once. When the user asks to edit the prompt first, it is left unsent in the input box."
 disable-model-invocation: true
 ---
 
 # Sidequest
 
-Open a forked copy of this conversation in a split beside the current pane, with a drafted prompt waiting in its input box. The user edits it and sends it. You never send it.
+Open a forked copy of this conversation in a split beside the current pane, paste a drafted prompt into its input box, and send it, so the dig starts without waiting for the user.
+
+When the user asks to see the prompt first, with a word such as "draft" or "let me edit", leave it unsent in the input box for them to edit and send.
 
 ## 1. Pick the question
 
@@ -14,9 +16,11 @@ The question follows the command: `$ARGUMENTS` in Claude Code, the appended requ
 
 ## 2. Fill in the script
 
-One script below does the whole job, in your session's working directory: detect the terminal app, read the harness, draft the prompt, find this pane, open the fork, and paste the draft unsent. Run it as a single shell call, because the steps share variables.
+One script below does the whole job, in your session's working directory: detect the terminal app, read the harness, draft the prompt, find this pane, open the fork, paste the draft, and send it. Run it as a single shell call, because the steps share variables.
 
-Replace two placeholders:
+Replace three placeholders:
+
+- `send=1`. Make it `send=0` only when the user asked to edit the prompt first.
 
 - `<the question, sharpened>` and the `Context:` line in the draft.
 - `<topic>`, three to six words naming the question, with no quotes in it.
@@ -64,6 +68,9 @@ else
   ready='shift\+tab to cycle|\? for shortcuts'
 fi
 
+# 1 sends the draft once it is pasted. 0 leaves it in the input box for the user.
+send=1
+
 draft=$(cat <<'EOF'
 Sidequest: <the question, sharpened>
 
@@ -102,6 +109,10 @@ if [ "$app" = ghostty ]; then
   fi
   "$G" send "$new" "$draft"
   sleep 2
+  if [ "$send" = 1 ]; then
+    "$G" key "$new" enter
+    sleep 2
+  fi
   "$G" read "$new" --tail 12
 else
   # REX_SESSION and REX_BLOCK name the pane this process started in. After a Rex
@@ -155,6 +166,10 @@ else
   fi
   printf '\033[200~%s\033[201~' "$draft" | "$R" send -s "$rs" -b "$new"
   sleep 2
+  if [ "$send" = 1 ]; then
+    "$R" send-key -s "$rs" -b "$new" enter
+    sleep 2
+  fi
   "$R" capture -s "$rs" -b "$new" --trim 2>&1 | tail -12
 fi
 ```
@@ -170,11 +185,14 @@ The script exits non-zero in six cases worth a reply, not a retry loop.
 - **The fork never reached its input box.** Read the pane it printed. A startup dialog may be open. Leave it for the user, and give them the draft in your reply instead.
 - **The split failed.** Rex prints the reason, or returns JSON with no `block_ids`. Report it and hand over the draft.
 
-Otherwise read the printed input box. Claude Code collapses a long paste into a `[Pasted text #N]` chip; when you see one, send the same draft again, which expands it into editable text. pi takes the whole draft the first time. Never press enter in that pane.
+Otherwise read what the pane printed.
+
+- **With `send=1`,** the fork should be working on the prompt, and its input box should be empty. If the draft is still sitting in the box, the enter did not land. Press it once more: `"$G" key <pane> enter` in Ghostty, `rex send-key -s <session> -b <block> enter` in Rex. A `[Pasted text #N]` chip in Claude Code sends the whole draft, so leave it.
+- **With `send=0`,** Claude Code collapses a long paste into a `[Pasted text #N]` chip. When you see one, send the same draft again, which expands it into editable text. pi takes the whole draft the first time. Do not press enter in that pane.
 
 ## 5. Report
 
-One line: the question, and that the draft is waiting in the new split for the user to edit and send.
+One line: the question, and that the side chat is working on it in the new split. With `send=0`, say that the draft is waiting there for the user to edit and send.
 
 ## 6. In the fork, when the dig is done
 

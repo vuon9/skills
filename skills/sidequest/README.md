@@ -1,13 +1,14 @@
 # sidequest
 
 Dig into one question without derailing the main chat. `/sidequest` forks the
-current conversation into a split beside your pane and leaves a drafted
-deep-dive prompt in its input box. You edit it and send it when you are ready,
-so nothing runs until you do.
+current conversation into a split beside your pane and sends a drafted
+deep-dive prompt there, so the dig starts at once. Ask to edit the prompt
+first, and it is left in the input box for you to change and send.
 
 ## Use it with a prompt
 
-- `/sidequest <question>` -> forks the chat and drafts a prompt for that question
+- `/sidequest <question>` -> forks the chat and sends a prompt for that question
+- `/sidequest draft <question>` -> forks the chat and leaves the prompt unsent, for you to edit
 - `/sidequest` -> takes the open question from the last few turns
 
 The fork has the whole conversation and all tools. The draft asks it to stay
@@ -54,7 +55,8 @@ because `claude --resume` finds a session by that folder and the agent's shell
 may have moved since.
 
 Both branches split to the right, wait for the fork's input box, and paste the
-draft as a bracketed paste so the app does not submit it. Ghostty's `send`
+draft as a bracketed paste, so a newline inside it does not submit it early.
+Then the skill presses enter, unless you asked to edit the prompt first. Ghostty's `send`
 already pastes. Rex's `send` writes raw bytes, so the skill wraps the draft in
 `\033[200~` and `\033[201~` itself.
 

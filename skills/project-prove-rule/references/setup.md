@@ -36,4 +36,4 @@ Follow the check skill once, as the next agent would, on a scratch change that b
 
 ## Hand off
 
-Tell the user what you verified, which tool you used and why, the bounds, what the check found in plain words, how to run it, and what it does not cover. Say where the check's folder is, and that a later conversation or a teammate finds the check only once that folder is committed. Suggest a second target only if you found a close one. When the code later changes without the check, `/invariant-check` brings it back in line.
+Tell the user what you verified, which tool you used and why, the bounds, what the check found in plain words, how to run it, and what it does not cover. Say where the check's folder is, and that a later conversation or a teammate finds the check only once that folder is committed. Suggest a second target only if you found a close one. When the code later changes without the check, `/project-prove-rule` brings it back in line.

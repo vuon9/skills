@@ -30,7 +30,7 @@ npx skills add -g vuon9/skills --skill diagnosing-bugs
 **Debug and verify**
 
 - [diagnosing-bugs](skills/diagnosing-bugs). A diagnosis loop for hard bugs and performance regressions.
-- [invariant-check](skills/invariant-check). Check a rule tests can't cover (races, retries, double charges) with TLA+. Needs the `statechart` skill.
+- [project-prove-rule](skills/project-prove-rule). Check a rule tests can't cover (races, retries, double charges) with TLA+. Needs the `statechart` skill.
 - [statechart](skills/statechart). Draw a TLA+ model as a statechart and the path to each broken rule. Needs Node 22.18+ and [mise](https://mise.jdx.dev) to fetch TLC and Java on first run.
 
 **Review and land**
@@ -69,7 +69,7 @@ Skills based on other people's work keep their copyright lines in the root `LICE
 
 - [diagnosing-bugs](skills/diagnosing-bugs) is based on `diagnosing-bugs` from [mattpocock/skills](https://github.com/mattpocock/skills) by Matt Pocock.
 - from [pstack](https://github.com/cursor/plugins/tree/main/pstack)
-  - [invariant-check](skills/invariant-check) merges `create-formal-verification-skill` and `maintain-formal-verification-skill`
+  - [project-prove-rule](skills/project-prove-rule) merges `create-formal-verification-skill` and `maintain-formal-verification-skill`
   - `bro`, `statechart`, `teach`, `how`, `unslop`, and `why` are based on skills from pstack. `bro` is unchanged; `teach` and `unslop` carry local edits; `how` and `why` have Cursor-specific wording normalized.
 - [find-state-machine](skills/find-state-machine) uses a prompt posted by [Steve Ruiz](https://x.com/steveruizok/status/2116552016218710389) on 31 October 2026.
 

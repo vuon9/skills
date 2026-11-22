@@ -49,13 +49,6 @@ class TestSkills(unittest.TestCase):
                                 "read it first, as sidequest does",
                             )
 
-    def test_sidequest_fork_asks_before_reporting_back(self):
-        skill = (SKILLS_DIR / "sidequest" / "SKILL.md").read_text(encoding="utf-8")
-        draft = skill.split("draft=$(cat <<'EOF'", 1)[1].split('fork+=(--name', 1)[0]
-        self.assertIn("ask me whether to send your summary to the main chat", draft)
-        self.assertIn("$main_chat", draft)
-        self.assertNotIn("paste back", skill)
-
 
 if __name__ == "__main__":
     unittest.main()

@@ -33,7 +33,7 @@ npx skills add -g vuon9/skills --skill diagnosing-bugs
 
 **Sessions**
 
-- [sidequest](skills/sidequest). Dig into one question in a forked session. Needs Ghostty 1.3+ on macOS with the `use-ghostty` skill, or Rex. Also needs `jq`, and Claude Code or pi.
+- [sidequest](skills/sidequest). Dig into one question in a forked session. Needs Ghostty 1.3+ on macOS with the `use-ghostty` skill, or Rex. Also needs Python 3, and Claude Code or pi.
 - [where-are-we](skills/where-are-we). A recap of a session's goal, progress, and drift. Needs Python 3, and Claude Code or pi.
 
 **Tools**

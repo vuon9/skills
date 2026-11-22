@@ -23,10 +23,8 @@ class TestSkills(unittest.TestCase):
                 self.assertEqual(meta.get("name"), d.name)
                 self.assertTrue(meta.get("description", "").startswith("Use when"))
 
-    def test_readme(self):
-        for d in SKILLS:
-            with self.subTest(skill=d.name):
-                self.assertTrue((d / "README.md").is_file())
+    def test_no_readme_inside_a_skill(self):
+        self.assertEqual([str(p.relative_to(SKILLS_DIR)) for p in SKILLS_DIR.rglob("README.md")], [])
 
     def test_no_em_dash(self):
         for path in SKILLS_DIR.rglob("*"):

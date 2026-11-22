@@ -25,7 +25,6 @@ npx skills add -g vuon9/skills --skill diagnosing-bugs
 **Debug and verify**
 
 - [diagnosing-bugs](skills/diagnosing-bugs). A diagnosis loop for hard bugs and performance regressions.
-- [project-prove-rule](skills/project-prove-rule). Check a rule tests can't cover (races, retries, double charges) with TLA+. Needs the `statechart` skill from [pstack](https://github.com/cursor/plugins/tree/main/pstack).
 
 **Review and land**
 
@@ -58,8 +57,7 @@ Skills based on other people's work keep their copyright lines in the root `LICE
 
 - [diagnosing-bugs](skills/diagnosing-bugs) is based on `diagnosing-bugs` from [mattpocock/skills](https://github.com/mattpocock/skills) by Matt Pocock.
 - from [pstack](https://github.com/cursor/plugins/tree/main/pstack)
-  - [project-prove-rule](skills/project-prove-rule) merges `create-formal-verification-skill` and `maintain-formal-verification-skill`
-  - `how`, `why`, `teach`, `bro`, `unslop`, and `statechart` are no longer copied here. Install them from pstack. Several skills here run `unslop`, `how`, `why`, or `statechart`, and pstack lets only the user start those, so remove the `disable-model-invocation` line from each after installing. [vstack](https://github.com/vuon9/vstack)'s installer does that.
+  - `how`, `why`, `teach`, `bro`, `unslop`, and `statechart` are no longer copied here. Install them from pstack. Several skills here run `unslop`, `how`, or `why`, and pstack lets only the user start those, so remove the `disable-model-invocation` line from each after installing. [vstack](https://github.com/vuon9/vstack)'s installer does that.
 - [find-state-machine](skills/find-state-machine) uses a prompt posted by [Steve Ruiz](https://x.com/steveruizok/status/2116552016218710389) on 31 October 2026.
 
 ## License

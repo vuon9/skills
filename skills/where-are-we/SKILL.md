@@ -19,55 +19,19 @@ Claude Code runs this skill with `context: fork`, so the reading happens in a su
 
 ## Read the transcript
 
-The user's arguments, if any: `$ARGUMENTS` in Claude Code, the appended request in pi. When they hold another session id, set `SID=<that id>` in the block below and extract that session instead.
+The user's arguments, if any: `$ARGUMENTS` in Claude Code, the appended request in pi. When they hold another session id, pass it to the script and extract that session instead.
 
-Most of the file is tool output. Pull out the conversation, one numbered turn per user message, with tool calls collapsed to a count. Each harness stores its transcript in its own shape and both are read into the same extract.
+Most of the file is tool output. `scripts/extract_transcript.py` pulls out the conversation: one numbered turn per user message, the agent's text, and tool calls collapsed to a count. It reads Claude Code's and pi's transcripts into the same extract.
 
 ```bash
-out=$(mktemp)
-if [ -n "${PI_SESSION_FILE:-}" ]; then
-  f=$(ls -t ~/.pi/agent/sessions/*/*"${SID:-$PI_SESSION_ID}"*.jsonl | head -1)
-  jq -r '
-    if .type == "compaction" or .type == "branch_summary" then
-      "\nsummary: \(.summary)"
-    elif .type == "message" then
-      .timestamp[0:16] as $at
-      | .message as $m
-      | if $m.role == "user" then
-          ($m.content | if type == "string" then . else map(select(.type == "text") | .text) | join("\n") end)
-          | sub("^\\s+"; "")
-          | select(. != "")
-          | if startswith("<skill ") and test("</skill>") then
-              ("/" + (capture("<skill name=\"(?<n>[^\"]*)\"").n) + " " + (sub("[\\s\\S]*</skill>[ \\t\\n]*"; "")))
-              | sub("\\s+$"; "")
-            else . end
-          | "\nUSER [\($at)]: \(.)"
-        elif $m.role == "assistant" then
-          $m.content[]? | if .type == "text" then "agent: \(.text)" elif .type == "toolCall" then "  tool" else empty end
-        else empty end
-    else empty end' "$f"
-else
-  f=$(ls -t ~/.claude/projects/*/"${SID:-${CLAUDE_CODE_SESSION_ID:-${CLAUDE_SESSION_ID:-}}}".jsonl | head -1)
-  jq -r '
-    select((.type == "user" or .type == "assistant") and .isMeta != true and .isSidechain != true)
-    | if .isCompactSummary then "\nsummary: \(.message.content | if type == "string" then . else map(.text? // empty) | join(" ") end)"
-      elif .type == "user" then
-        .timestamp[0:16] as $at
-        | (.message.content | if type == "string" then . else map(select(.type == "text") | .text) | join("\n") end)
-        | sub("^\\s+"; "")
-        | select(. != "" and (test("^<(task-notification|local-command|system-reminder)") | not))
-        | if test("<command-name>") then "/" + capture("<command-name>/?(?<n>[^<]*)</command-name>").n + " " + ((capture("<command-args>(?<a>[^<]*)</command-args>") // {a: ""}).a) else . end
-        | "\nUSER [\($at)]: \(.)"
-      else .message.content[]? | if .type == "text" then "agent: \(.text)" elif .type == "tool_use" then "  tool" else empty end
-      end' "$f"
-fi | awk '
-  /^  tool$/ { n++; next }
-  { if (n) { print "  (" n " tool calls)"; n = 0 } if (/^USER /) printf "\n[turn %d] ", ++t; print }
-  END { if (n) print "  (" n " tool calls)" }' > "$out"
-wc -l "$out"; grep '^\[turn' "$out" | cut -c1-200; echo "OUT=$out"
+python3 <this skill's folder>/scripts/extract_transcript.py [SESSION_ID]
 ```
 
-The `grep` prints every user turn. That list is your table of contents. Then read the whole file from the top, in order. Do not skip ahead to the end, and do not read only the turns that look relevant. The last turn is the request for this check, so leave it out.
+- With no id it reads this session.
+- It writes the extract to a temp file and prints the line count, every user turn, and `OUT=<file>` last.
+- "no transcript found" means the id is wrong or the session is on another machine. Say so and stop.
+
+The printed user turns are your table of contents. Then read the whole file from the top, in order. Do not skip ahead to the end, and do not read only the turns that look relevant. The last turn is the request for this check, so leave it out.
 
 In pi, that read is the subagent's job:
 

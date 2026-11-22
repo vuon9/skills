@@ -1,6 +1,6 @@
 # skills
 
-Agent skills by Vuong. They support Claude Code and pi.
+Agent skills by Vuong. They support Claude Code and pi. Each skill is one folder with a `SKILL.md`, and this is the only README.
 
 ## Install
 
@@ -18,37 +18,28 @@ npx skills add -g vuon9/skills --skill diagnosing-bugs
 
 **Understand**
 
-- [how](skills/how). Explain how a subsystem works, with evidence from the code. Needs a harness with subagents.
-- [why](skills/why). Investigate why a change was made or a design was picked. Needs optional source access: git history, tracker, docs, chat, observability, analytics.
-- [teach](skills/teach). Teach a body of work plainly, at the person's pace. Needs `how` and `why`, plus `unslop`.
-- [walk-me](skills/walk-me). Work through questions or open decisions one item at a time. Needs a harness with subagents; optional `how` and `why`.
-- [bro](skills/bro). Restate the last message in plain language, with no jargon.
+- [walk-me](skills/walk-me). Work through questions or open decisions one item at a time. Needs a harness with subagents; optional `how` and `why` from [pstack](https://github.com/cursor/plugins/tree/main/pstack).
 - [find-state-machine](skills/find-state-machine). Find every implicit state machine in an app, or dig into the one behind a named flow.
 - [find-real-cases](skills/find-real-cases). Ground a topic in a few real cases. Needs read access to production data (logs, errors, database), through MCP servers or CLIs.
 
 **Debug and verify**
 
 - [diagnosing-bugs](skills/diagnosing-bugs). A diagnosis loop for hard bugs and performance regressions.
-- [project-prove-rule](skills/project-prove-rule). Check a rule tests can't cover (races, retries, double charges) with TLA+. Needs the `statechart` skill.
-- [statechart](skills/statechart). Draw a TLA+ model as a statechart and the path to each broken rule. Needs Node 22.18+ and [mise](https://mise.jdx.dev) to fetch TLC and Java on first run.
+- [project-prove-rule](skills/project-prove-rule). Check a rule tests can't cover (races, retries, double charges) with TLA+. Needs the `statechart` skill from [pstack](https://github.com/cursor/plugins/tree/main/pstack).
 
 **Review and land**
 
 - [pr-review](skills/pr-review). Handle review feedback on a GitHub PR or on your machine: fix easy findings, frame hard ones as options, answer every thread, and get a review from Devin or another agent before a PR exists. Needs Python 3, `gh` signed in for GitHub, and [Hunk](https://github.com/modem-dev/hunk) for a review with you; the `hunk-review` skill ships with Hunk.
 
-**Write**
-
-- [unslop](skills/unslop). Remove AI tells from any writing.
 
 **Sessions**
 
 - [sidequest](skills/sidequest). Dig into one question in a forked session. Needs Ghostty 1.3+ on macOS with the `use-ghostty` skill, or Rex. Also needs `jq`, and Claude Code or pi.
-- [where-are-we](skills/where-are-we). A recap of a session's goal, progress, and drift. Needs `jq`, and Claude Code or pi.
+- [where-are-we](skills/where-are-we). A recap of a session's goal, progress, and drift. Needs Python 3, and Claude Code or pi.
 
 **Tools**
 
 - [use-ghostty](skills/use-ghostty). Read and drive other Ghostty panes, tabs, and windows. Needs Ghostty 1.3+ on macOS.
-- [use-siyuan](skills/use-siyuan). Drive SiYuan notes from the `siyuan` CLI: notebooks, documents, blocks, search, export, sync. Needs the `siyuan` CLI and a workspace.
 
 **Build and ship**
 
@@ -68,7 +59,7 @@ Skills based on other people's work keep their copyright lines in the root `LICE
 - [diagnosing-bugs](skills/diagnosing-bugs) is based on `diagnosing-bugs` from [mattpocock/skills](https://github.com/mattpocock/skills) by Matt Pocock.
 - from [pstack](https://github.com/cursor/plugins/tree/main/pstack)
   - [project-prove-rule](skills/project-prove-rule) merges `create-formal-verification-skill` and `maintain-formal-verification-skill`
-  - `bro`, `statechart`, `teach`, `how`, `unslop`, and `why` are based on skills from pstack. `bro` is unchanged; `teach` and `unslop` carry local edits; `how` and `why` have Cursor-specific wording normalized.
+  - `how`, `why`, `teach`, `bro`, `unslop`, and `statechart` are no longer copied here. Install them from pstack. Several skills here run `unslop`, `how`, `why`, or `statechart`, and pstack lets only the user start those, so remove the `disable-model-invocation` line from each after installing. [vstack](https://github.com/vuon9/vstack)'s installer does that.
 - [find-state-machine](skills/find-state-machine) uses a prompt posted by [Steve Ruiz](https://x.com/steveruizok/status/2116552016218710389) on 31 October 2026.
 
 ## License

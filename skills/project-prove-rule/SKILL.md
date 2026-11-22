@@ -14,7 +14,7 @@ Each check lives in the repo as a project skill named `verify-<area>`. The next 
 /project-prove-rule [new | recheck] [what]
 ```
 
-This skill proves a rule about what the running code does. A mistake in how code is written, such as a wrong import or a copied pattern, is `correct-me`'s job: it makes the mistake impossible with structure, types, a lint, or a test.
+This skill proves a rule about what the running code does. A mistake in how code is written, such as a wrong import or a copied pattern, is `project-correct`'s job: it makes the mistake impossible with structure, types, a lint, or a test.
 
 `what` is a rule, an area, a bug, or a piece of code, in any words. `new` and `recheck` force a path. With `what`, Match on code finds the check. Without it, Pick the check does.
 

@@ -1,0 +1,21 @@
+<!doctype html>
+<!-- The narrator avatar. avatar.py fills the dollar placeholders: name, opacity, ring, antenna colour and mouth. -->
+<html>
+<body style="margin:0;background:transparent">
+  <div id="badge" style="display:inline-flex;align-items:center;gap:12px;padding:6px;font-family:Inter,sans-serif">
+    <div style="background:rgba(15,42,58,.88);color:#fff;font-weight:600;font-size:17px;padding:7px 14px;border-radius:16px;opacity:$opacity">$name</div>
+    <svg width="120" height="120" viewBox="0 0 120 120" style="filter:drop-shadow(0 4px 10px rgba(0,0,0,.35))">
+      <circle cx="60" cy="60" r="55" fill="#15384d"/>
+      $ring
+      <line x1="60" y1="22" x2="60" y2="32" stroke="#d9f7f1" stroke-width="4" stroke-linecap="round"/>
+      <circle cx="60" cy="20" r="5" fill="$antenna"/>
+      <rect x="28" y="32" width="64" height="58" rx="16" fill="#d9f7f1"/>
+      <circle cx="47" cy="55" r="7" fill="#0f2a3a"/>
+      <circle cx="73" cy="55" r="7" fill="#0f2a3a"/>
+      <circle cx="49" cy="53" r="2" fill="#ffffff"/>
+      <circle cx="75" cy="53" r="2" fill="#ffffff"/>
+      $mouth
+    </svg>
+  </div>
+</body>
+</html>

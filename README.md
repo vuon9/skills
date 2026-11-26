@@ -44,6 +44,7 @@ npx skills add -g vuon9/skills --skill diagnosing-bugs
 
 - [apple-ship](skills/apple-ship). Build, sign, notarize, and release iOS and macOS apps. Needs macOS with Xcode, and `gh` for the release workflows.
 - [terminal-demo](skills/terminal-demo). Record a demo video of a terminal app, with a subtitle for each key, on a made-up machine. Needs Docker, Python 3, and ffmpeg.
+- [web-demo](skills/web-demo). Record a narrated demo video of a web app, aligned first with you on audience, depth, cases, layout, style and voice: a scripted browser run, a free offline voice or your own, captions, and a bot avatar that shows who is talking. Needs Python 3.10+, npm (for the voice files), and ffmpeg.
 
 ## Tests
 

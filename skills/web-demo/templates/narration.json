@@ -1,0 +1,22 @@
+{
+  "intro_hold": 0.8,
+  "beat_gap": 0.6,
+  "outro_hold": 1.5,
+  "beats": [
+    {
+      "id": "title",
+      "say": "This is the new order queue, and how an order moves through it.",
+      "caption": "This is the new order queue, and how an order moves through it."
+    },
+    {
+      "id": "queue",
+      "say": "Every order that is waiting for someone lands here, with its status.",
+      "caption": "Every order that is waiting for someone lands here, with its status."
+    },
+    {
+      "id": "open",
+      "say": "Open an order, and its status sits at the top.",
+      "caption": "Open an order, and its status sits at the top."
+    }
+  ]
+}

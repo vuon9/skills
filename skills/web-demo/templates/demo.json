@@ -1,0 +1,31 @@
+{
+  "title": "Order queue walkthrough",
+  "subtitle": "How a new order reaches the warehouse",
+  "title_footer": "Local app with sample data",
+  "title_card": true,
+  "layout": "strip",
+  "captions": true,
+  "captions_file": true,
+  "avatar": {"show": true, "name": "Demo Bot"},
+  "voice": {"engine": "kokoro", "id": "af_heart", "speed": 1.0},
+  "style": {
+    "background": "#1b2630",
+    "panel": "#ffffff",
+    "panel_opacity": 0.08,
+    "accent": "#2ee6c5",
+    "highlight": "#f0a020",
+    "font": "Inter",
+    "text": "#ffffff"
+  },
+  "notes": {
+    "audience": "Operations leads; know the old screen, not the code",
+    "goal": "Agree the new flow is ready to try on staging",
+    "depth": "standard: happy path and the two exceptions they hit most",
+    "length": "about 4 minutes",
+    "environment": "local app, seeded sample data; the payment provider is mocked",
+    "disclose": "title card says sample data; narration says when a step happens off camera",
+    "avoid": "real customer names, prices, internal URLs",
+    "tone": "plain business words, no field names unless they appear on screen",
+    "delivery": "mp4 plus .srt, under 50 MB, posted in the team channel"
+  }
+}
